@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: jdbc:h2:file:./data/mylog;MODE=MySQL;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+server:
+  port: 8080
+
+mylog:
+  cors:
+    allowed-origins: http://localhost:5173
+  resume:
+    storage-dir: ./uploads/resume
+    filename: wanghuan-resume.pdf
+  jwt:
+    secret: mylog-dev-secret-change-me-please-32bytes-min
+    expire-hours: 72
+  admin:
+    username: admin
+    password: admin123

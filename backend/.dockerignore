@@ -1,0 +1,6 @@
+target
+data
+uploads
+.idea
+*.iml
+.mvn/wrapper/maven-wrapper.jar.bak

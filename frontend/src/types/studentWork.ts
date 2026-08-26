@@ -1,0 +1,100 @@
+export type StudentWorkRole = {
+  title: string
+  org: string
+  period?: string
+}
+
+export type StudentWorkAward = {
+  date: string
+  title: string
+}
+
+export type StudentWorkExperience = {
+  date: string
+  title: string
+}
+
+export type StudentWorkStory = {
+  heading: string
+  body: string
+}
+
+export type StudentWorkLeagueItem = {
+  period: string
+  role: string
+}
+
+export type StudentWorkData = {
+  meta: {
+    title: string
+    subtitle: string
+    volunteer: {
+      registered: boolean
+      hours2024: string
+      leagueReview2024: string
+      rankPercent: string
+    }
+  }
+  roles: StudentWorkRole[]
+  experienceIntro: string
+  timeline: StudentWorkExperience[]
+  story: StudentWorkStory[]
+  leagueHistory: StudentWorkLeagueItem[]
+  awards: StudentWorkAward[]
+}
+
+export const defaultStudentWork: StudentWorkData = {
+  meta: {
+    title: '学生工作',
+    subtitle: '主要负责统筹院内调研任务，协助开展学生活动，兼顾年级会、社团等组织工作。',
+    volunteer: {
+      registered: true,
+      hours2024: '15.92 小时',
+      leagueReview2024: '优秀',
+      rankPercent: '23.48%',
+    },
+  },
+  roles: [
+    { title: '调研部部长', org: '湖南大学信息科学与工程学院团学组织' },
+    { title: '权益股', org: '信科院 23 级年级会' },
+    { title: '总负责', org: '湖南大学追风运动联合协会' },
+    { title: '功能型团支部书记', org: '湖南大学学生社团', period: '2024 年 10 月至今' },
+  ],
+  experienceIntro:
+    '我主要负责统筹院内的调研任务，以及协助开展各项学生活动。带领部员们策划、筹备并组织了一系列活动：毕业生就业意向调研、大学生活动兴趣调研、信科院文化衫征集活动、天马园区拔河活动、2025 麓山寻记等，都取得了同学们的喜爱和一致好评。',
+  timeline: [
+    { date: '2024 年 3 月', title: '参与筹备大学生活动兴趣调研' },
+    { date: '2024 年 4 月', title: '参与筹备大学生毕业发展意向调研' },
+    { date: '2024 年 4 月', title: '组织「2024 麓山寻记」活动' },
+    { date: '2024 年 5 月', title: '参加梅溪湖志愿者活动' },
+    { date: '2024 年 10 月', title: '协助学生代表大会进行提案收集' },
+    { date: '2024 年 10 月', title: '策划并组织信息科学与工程学院文化衫 IP 设计' },
+    { date: '2024 年 11 月', title: '策划并筹备大学生活动兴趣调研' },
+    { date: '2024 年 12 月', title: '策划并组织「青春无畏·力挽狂澜」拔河友谊赛' },
+    { date: '2025 年 4 月', title: '策划并组织「2025 麓山寻记」活动' },
+    { date: '2025 年 6 月', title: '策划并组织「青春献礼毕业季·踏寻初心登高望远」活动' },
+  ],
+  story: [
+    {
+      heading: '学生代表大会',
+      body: '在学生代表大会中，我和部员们对同学们的提案进行了汇总，并在「吐槽大会」中反馈到后勤保障部，督促他们的工作，改善同学们的生活条件。',
+    },
+    {
+      heading: '年级会工作',
+      body: '在年级会中及时完成辅导员老师布置的各项任务，抽出空余时间补足、修改各项文件，及时发送通知，配合工作顺利进行。',
+    },
+    {
+      heading: '社团工作',
+      body: '积极下发社管部通知，引导成员参与社管部组织的活动。在「百团大战」中，组织其余社长管理摊位、吸引新生加入，为社团增添新鲜血液。',
+    },
+  ],
+  leagueHistory: [{ period: '2024 年 10 月至今', role: '湖南大学学生社团功能型团支部书记' }],
+  awards: [
+    { date: '2023 年 10 月', title: '湖南大学校篮球新生杯团体赛亚军' },
+    { date: '2024 年 5 月', title: '「关爱生命，救在身边」应急救护培训结业证书' },
+    { date: '2024 年', title: '批改网杯英语翻译大赛优秀作品奖' },
+    { date: '2023–2024 学年', title: '湖南大学单项奖学金' },
+    { date: '2024 年', title: 'APMCM 亚太杯数学建模竞赛三等奖' },
+    { date: '2024 年', title: '美国大学生数学建模竞赛（MCM）三等奖' },
+  ],
+}

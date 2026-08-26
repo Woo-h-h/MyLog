@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://mysql:3306/mylog?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=utf8}
+    username: ${MYSQL_USER:mylog}
+    password: ${MYSQL_PASSWORD:mylog}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  h2:
+    console:
+      enabled: false
+
+server:
+  port: ${SERVER_PORT:8080}
+
+mylog:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost}
+  resume:
+    storage-dir: ${RESUME_DIR:/app/uploads/resume}
+    filename: wanghuan-resume.pdf
+  jwt:
+    secret: ${JWT_SECRET:mylog-prod-change-this-secret-to-32bytes-min}
+    expire-hours: ${JWT_EXPIRE_HOURS:72}
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:please-change-me}

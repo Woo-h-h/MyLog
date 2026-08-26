@@ -1,0 +1,61 @@
+export interface Profile {
+  displayName: string
+  tagline: string
+  subtitle?: string | null
+  bio?: string | null
+  phone?: string | null
+  email?: string | null
+  githubUrl?: string | null
+  skills: string[]
+  highlights?: string[]
+}
+
+export interface ApiResponse<T> {
+  code: number
+  message: string
+  data: T
+}
+
+export interface ProjectSummary {
+  slug: string
+  title: string
+  summary: string
+  techStack: string[]
+  startDate?: string | null
+  endDate?: string | null
+  featured: boolean
+}
+
+export interface ProjectDetail extends ProjectSummary {
+  content: string
+  githubUrl?: string | null
+  demoUrl?: string | null
+}
+
+export interface ResumeData {
+  summary: string
+  education: Array<{
+    school: string
+    college?: string
+    major: string
+    degree: string
+    period: string
+    gpa?: string
+    honors?: string
+  }>
+  internships: Array<{
+    company: string
+    role: string
+    period: string
+    location?: string
+    project?: string
+    highlights: string[]
+  }>
+  projectSummaries: Array<{
+    name: string
+    period: string
+    oneLiner: string
+  }>
+  skills: string[]
+  pdfAvailable: boolean
+}

@@ -1,11 +1,14 @@
 import { api, getData } from './client'
-import type { ResumeData } from '../types/profile'
+import type { ResumeInfo } from '../types/profile'
 
 export function fetchResume() {
-  return getData<ResumeData>(api.get('/resume'))
+  return getData<ResumeInfo>(api.get('/resume'))
 }
 
-/** Use same-origin proxy path so download works in dev */
+export function resumeViewUrl() {
+  return '/api/resume/view'
+}
+
 export function resumeDownloadUrl() {
   return '/api/resume/download'
 }

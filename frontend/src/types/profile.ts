@@ -32,30 +32,8 @@ export interface ProjectDetail extends ProjectSummary {
   demoUrl?: string | null
 }
 
-export interface ResumeData {
-  summary: string
-  education: Array<{
-    school: string
-    college?: string
-    major: string
-    degree: string
-    period: string
-    gpa?: string
-    honors?: string
-  }>
-  internships: Array<{
-    company: string
-    role: string
-    period: string
-    location?: string
-    project?: string
-    highlights: string[]
-  }>
-  projectSummaries: Array<{
-    name: string
-    period: string
-    oneLiner: string
-  }>
-  skills: string[]
+export interface ResumeInfo {
   pdfAvailable: boolean
+  filename?: string | null
+  uploadedAt?: string | null
 }

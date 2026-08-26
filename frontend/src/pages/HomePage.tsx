@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { fetchPosts } from '../api/posts'
 import { fetchProfile } from '../api/profile'
 import { fetchProjects } from '../api/projects'
+import { fetchResume, resumeDownloadUrl } from '../api/resume'
 import { LoadingState } from '../components/UiStates'
 import { AdminEditLink } from '../components/AdminEditLink'
 import type { PostSummary } from '../types/post'
@@ -12,6 +13,7 @@ export function HomePage() {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [featured, setFeatured] = useState<ProjectSummary[]>([])
   const [latestPosts, setLatestPosts] = useState<PostSummary[]>([])
+  const [resumePdfReady, setResumePdfReady] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -19,15 +21,17 @@ export function HomePage() {
     let cancelled = false
     ;(async () => {
       try {
-        const [p, projects, blogs] = await Promise.all([
+        const [p, projects, blogs, resume] = await Promise.all([
           fetchProfile(),
           fetchProjects(true),
           fetchPosts({ type: 'blog', size: 3 }),
+          fetchResume().catch(() => null),
         ])
         if (!cancelled) {
           setProfile(p)
           setFeatured(projects.slice(0, 3))
           setLatestPosts(blogs.items)
+          setResumePdfReady(resume?.pdfAvailable ?? false)
         }
       } catch (e) {
         if (!cancelled) setError(e instanceof Error ? e.message : '加载失败')
@@ -67,9 +71,15 @@ export function HomePage() {
           <p className="max-w-2xl text-base leading-relaxed text-[var(--color-muted)]">{profile.subtitle}</p>
         )}
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link to="/resume" className="geek-btn-primary">
-            下载简历
-          </Link>
+          {resumePdfReady ? (
+            <a href={resumeDownloadUrl()} className="geek-btn-primary">
+              下载简历
+            </a>
+          ) : (
+            <Link to="/resume" className="geek-btn-primary">
+              查看简历
+            </Link>
+          )}
           <Link to="/projects" className="geek-btn-secondary">
             查看项目
           </Link>

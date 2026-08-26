@@ -137,14 +137,4 @@ public class AdminController {
         JsonNode saved = siteContentService.save(SiteContentService.KEY_STUDENT_WORK, body);
         return ApiResponse.ok(objectMapper.convertValue(saved, Object.class));
     }
-
-    @GetMapping("/resume/content")
-    public ApiResponse<com.mylog.backend.dto.ResumeDto> getResumeContent() {
-        return ApiResponse.ok(resumeService.getContentForAdmin());
-    }
-
-    @PutMapping("/resume/content")
-    public ApiResponse<com.mylog.backend.dto.ResumeDto> updateResumeContent(@RequestBody com.mylog.backend.dto.ResumeDto body) {
-        return ApiResponse.ok(resumeService.updateContent(body));
-    }
 }

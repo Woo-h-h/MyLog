@@ -24,6 +24,15 @@ public class ResumeController {
         return ApiResponse.ok(resumeService.getResume());
     }
 
+    @GetMapping("/view")
+    public ResponseEntity<Resource> view() {
+        Resource pdf = resumeService.loadPdf();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
     @GetMapping("/download")
     public ResponseEntity<Resource> download() {
         Resource pdf = resumeService.loadPdf();

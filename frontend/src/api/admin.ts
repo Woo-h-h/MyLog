@@ -105,13 +105,3 @@ export function updateAdminStudentWork(payload: import('../types/studentWork').S
     api.put('/admin/content/student-work', payload),
   )
 }
-
-export function fetchAdminResumeContent() {
-  return getData<Omit<import('../types/profile').ResumeData, 'pdfAvailable'>>(api.get('/admin/resume/content'))
-}
-
-export function updateAdminResumeContent(
-  payload: Omit<import('../types/profile').ResumeData, 'pdfAvailable'>,
-) {
-  return getData<import('../types/profile').ResumeData>(api.put('/admin/resume/content', payload))
-}

@@ -10,6 +10,19 @@
 
 ---
 
+## [2026-08-26] — 简历改为纯 PDF 存储
+
+### Changed
+- 移除简历 JSON 正文编辑，简历仅以 PDF 源文件保存（磁盘 + `resume_file` 表）
+- 前台 `/resume` 在线预览 PDF，并提供下载
+- 管理后台 `/admin/resume` 仅保留 PDF 上传与管理
+
+### Removed
+- `/api/admin/resume/content` JSON 读写接口
+- `site_content` 中的 `resume` 键
+
+---
+
 ## [2026-08-26] — 管理员前台可编辑全站内容
 
 ### Added

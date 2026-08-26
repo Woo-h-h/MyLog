@@ -1,8 +1,5 @@
 package com.mylog.backend.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mylog.backend.dto.ResumeDto;
 import com.mylog.backend.dto.ResumeFileDto;
 import com.mylog.backend.model.ResumeFile;
@@ -22,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,8 +27,6 @@ import java.util.UUID;
 public class ResumeService {
 
     private final ResumeFileRepository resumeFileRepository;
-    private final ObjectMapper objectMapper;
-    private final SiteContentService siteContentService;
 
     @Value("${mylog.resume.storage-dir:./uploads/resume}")
     private String storageDir;
@@ -39,34 +35,20 @@ public class ResumeService {
     private String configuredFilename;
 
     public ResumeDto getResume() {
-        ResumeDto dto = siteContentService.readAs(
-                SiteContentService.KEY_RESUME,
-                ResumeDto.class,
-                "seed/resume.json");
-        dto.setPdfAvailable(resolvePdfPath().map(Files::exists).orElse(false));
-        return dto;
-    }
-
-    public ResumeDto getContentForAdmin() {
-        ResumeDto dto = siteContentService.readAs(
-                SiteContentService.KEY_RESUME,
-                ResumeDto.class,
-                "seed/resume.json");
-        dto.setPdfAvailable(false);
-        return dto;
-    }
-
-    public ResumeDto updateContent(ResumeDto body) {
-        try {
-            JsonNode node = objectMapper.valueToTree(body);
-            if (node instanceof ObjectNode objectNode) {
-                objectNode.remove("pdfAvailable");
-            }
-            siteContentService.save(SiteContentService.KEY_RESUME, node);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid resume content");
+        Optional<ResumeFile> current = currentFile();
+        if (current.isEmpty()) {
+            return ResumeDto.builder().pdfAvailable(false).build();
         }
-        return getResume();
+        ResumeFile file = current.get();
+        Path path = Paths.get(file.getStoragePath());
+        if (!Files.exists(path)) {
+            return ResumeDto.builder().pdfAvailable(false).build();
+        }
+        return ResumeDto.builder()
+                .pdfAvailable(true)
+                .filename(file.getOriginalFilename())
+                .uploadedAt(file.getUploadedAt())
+                .build();
     }
 
     public Resource loadPdf() {
@@ -79,9 +61,9 @@ public class ResumeService {
     }
 
     public String downloadFilename() {
-        return resumeFileRepository.findFirstByCurrentVersionTrueOrderByUploadedAtDesc()
+        return currentFile()
                 .map(ResumeFile::getOriginalFilename)
-                .orElse("\u738b\u7115_\u7b80\u5386.pdf");
+                .orElse("resume.pdf");
     }
 
     public List<ResumeFileDto> listFiles() {
@@ -141,9 +123,17 @@ public class ResumeService {
                 .build();
     }
 
-    private java.util.Optional<Path> resolvePdfPath() {
-        return resumeFileRepository.findFirstByCurrentVersionTrueOrderByUploadedAtDesc()
+    private Optional<ResumeFile> currentFile() {
+        return resumeFileRepository.findFirstByCurrentVersionTrueOrderByUploadedAtDesc();
+    }
+
+    private Optional<Path> resolvePdfPath() {
+        return currentFile()
                 .map(f -> Paths.get(f.getStoragePath()))
-                .or(() -> java.util.Optional.of(Paths.get(storageDir, configuredFilename).toAbsolutePath().normalize()));
+                .filter(Files::exists)
+                .or(() -> {
+                    Path fallback = Paths.get(storageDir, configuredFilename).toAbsolutePath().normalize();
+                    return Files.exists(fallback) ? Optional.of(fallback) : Optional.empty();
+                });
     }
 }

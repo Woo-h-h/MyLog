@@ -41,7 +41,7 @@ export function AdminHomePage() {
           </li>
           <li>
             <Link className="text-[var(--color-accent)] hover:underline" to="/admin/resume">
-              编辑简历（PDF + 正文）
+              编辑简历（上传 PDF）
             </Link>
           </li>
           <li>

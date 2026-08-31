@@ -104,6 +104,7 @@ public class ProjectService {
                 .startDate(p.getStartDate())
                 .endDate(p.getEndDate())
                 .featured(Boolean.TRUE.equals(p.getFeatured()))
+                .githubUrl(p.getGithubUrl())
                 .build();
     }
 

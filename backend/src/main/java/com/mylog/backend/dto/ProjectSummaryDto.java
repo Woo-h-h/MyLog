@@ -15,4 +15,5 @@ public class ProjectSummaryDto {
     private String startDate;
     private String endDate;
     private boolean featured;
+    private String githubUrl;
 }

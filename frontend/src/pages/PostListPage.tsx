@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchPosts, fetchTags } from '../api/posts'
 import { EmptyState, LoadingState } from '../components/UiStates'
-import { AdminEditLink } from '../components/AdminEditLink'
+import { PageHero } from '../components/PageHero'
 import type { PostSummary, TagItem } from '../types/post'
 
 type PostKind = 'blog' | 'note'
@@ -59,15 +59,11 @@ export function PostListPage({ type }: { type: PostKind }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-end">
-        <AdminEditLink to="/admin/posts" label="管理文章" />
-      </div>
-      <div className="space-y-2">
-        <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight">{title}</h1>
-        <p className="text-[var(--color-muted)]">
-          {type === 'blog' ? '中长文，展示思考与工程实践。' : '短笔记，快速检索知识点。'}
-        </p>
-      </div>
+      <PageHero
+        label={type === 'blog' ? 'Blog' : 'Notes'}
+        title={title}
+        description={type === 'blog' ? '技术博客：RAG、Agent、后端工程实践。' : '短笔记，快速检索知识点。'}
+      />
 
       {tags.length > 0 && (
         <div className="flex flex-wrap gap-2">

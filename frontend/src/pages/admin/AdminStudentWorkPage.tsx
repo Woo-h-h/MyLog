@@ -1,14 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchAdminStudentWork, updateAdminStudentWork } from '../../api/admin'
-import type {
-  StudentWorkAward,
-  StudentWorkData,
-  StudentWorkExperience,
-  StudentWorkLeagueItem,
-  StudentWorkRole,
-  StudentWorkStory,
-} from '../../types/studentWork'
+import type { StudentWorkData, StudentWorkExperience, StudentWorkRole } from '../../types/studentWork'
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -63,27 +56,6 @@ export function AdminStudentWorkPage() {
     })
   }
 
-  function updateStory(index: number, patch: Partial<StudentWorkStory>) {
-    setForm({
-      ...data,
-      story: data.story.map((s, i) => (i === index ? { ...s, ...patch } : s)),
-    })
-  }
-
-  function updateLeague(index: number, patch: Partial<StudentWorkLeagueItem>) {
-    setForm({
-      ...data,
-      leagueHistory: data.leagueHistory.map((l, i) => (i === index ? { ...l, ...patch } : l)),
-    })
-  }
-
-  function updateAward(index: number, patch: Partial<StudentWorkAward>) {
-    setForm({
-      ...data,
-      awards: data.awards.map((a, i) => (i === index ? { ...a, ...patch } : a)),
-    })
-  }
-
   return (
     <form onSubmit={onSubmit} className="max-w-3xl space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -118,50 +90,7 @@ export function AdminStudentWorkPage() {
         </label>
       </Section>
 
-      <Section title="综合情况">
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            checked={data.meta.volunteer.registered}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                meta: {
-                  ...data.meta,
-                  volunteer: { ...data.meta.volunteer, registered: e.target.checked },
-                },
-              })
-            }
-          />
-          <span>志愿汇已注册</span>
-        </label>
-        {(
-          [
-            ['hours2024', '2024 志愿服务时长'],
-            ['leagueReview2024', '2024 教育评议'],
-            ['rankPercent', '专业成绩排名'],
-          ] as const
-        ).map(([key, label]) => (
-          <label key={key} className="block space-y-1 text-sm">
-            <span>{label}</span>
-            <input
-              className="geek-input"
-              value={data.meta.volunteer[key]}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  meta: {
-                    ...data.meta,
-                    volunteer: { ...data.meta.volunteer, [key]: e.target.value },
-                  },
-                })
-              }
-            />
-          </label>
-        ))}
-      </Section>
-
-      <Section title="现任职务">
+      <Section title="曾任职务">
         {data.roles.map((role, i) => (
           <div key={i} className="space-y-2 rounded border border-[var(--color-line)] p-3">
             <div className="flex justify-between gap-2">
@@ -203,12 +132,7 @@ export function AdminStudentWorkPage() {
         </button>
       </Section>
 
-      <Section title="调研部工作经历">
-        <textarea
-          className="min-h-24 w-full geek-input text-sm"
-          value={data.experienceIntro}
-          onChange={(e) => setForm({ ...form, experienceIntro: e.target.value })}
-        />
+      <Section title="工作经历">
         {data.timeline.map((item, i) => (
           <div key={i} className="flex flex-wrap gap-2">
             <input
@@ -238,112 +162,6 @@ export function AdminStudentWorkPage() {
           onClick={() => setForm({ ...form, timeline: [...data.timeline, { date: '', title: '' }] })}
         >
           + 添加时间线
-        </button>
-      </Section>
-
-      <Section title="其他工作">
-        {data.story.map((item, i) => (
-          <div key={i} className="space-y-2 rounded border border-[var(--color-line)] p-3">
-            <div className="flex justify-between">
-              <span className="text-xs text-[var(--color-muted)]">段落 {i + 1}</span>
-              <button
-                type="button"
-                className="text-xs text-[var(--color-error)]"
-                onClick={() => setForm({ ...form, story: data.story.filter((_, j) => j !== i) })}
-              >
-                删除
-              </button>
-            </div>
-            <input
-              className="geek-input"
-              placeholder="小标题"
-              value={item.heading}
-              onChange={(e) => updateStory(i, { heading: e.target.value })}
-            />
-            <textarea
-              className="min-h-20 w-full geek-input text-sm"
-              placeholder="正文"
-              value={item.body}
-              onChange={(e) => updateStory(i, { body: e.target.value })}
-            />
-          </div>
-        ))}
-        <button
-          type="button"
-          className="text-sm text-[var(--color-accent)]"
-          onClick={() => setForm({ ...form, story: [...data.story, { heading: '', body: '' }] })}
-        >
-          + 添加段落
-        </button>
-      </Section>
-
-      <Section title="团干部工作经历">
-        {data.leagueHistory.map((item, i) => (
-          <div key={i} className="flex flex-wrap gap-2">
-            <input
-              className="geek-input flex-1"
-              placeholder="任期"
-              value={item.period}
-              onChange={(e) => updateLeague(i, { period: e.target.value })}
-            />
-            <input
-              className="geek-input min-w-[12rem] flex-[2]"
-              placeholder="职务"
-              value={item.role}
-              onChange={(e) => updateLeague(i, { role: e.target.value })}
-            />
-            <button
-              type="button"
-              className="text-xs text-[var(--color-error)]"
-              onClick={() =>
-                setForm({ ...form, leagueHistory: data.leagueHistory.filter((_, j) => j !== i) })
-              }
-            >
-              删
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          className="text-sm text-[var(--color-accent)]"
-          onClick={() =>
-            setForm({ ...form, leagueHistory: [...data.leagueHistory, { period: '', role: '' }] })
-          }
-        >
-          + 添加记录
-        </button>
-      </Section>
-
-      <Section title="相关获奖">
-        {data.awards.map((item, i) => (
-          <div key={i} className="flex flex-wrap gap-2">
-            <input
-              className="geek-input flex-1"
-              placeholder="日期"
-              value={item.date}
-              onChange={(e) => updateAward(i, { date: e.target.value })}
-            />
-            <input
-              className="geek-input min-w-[12rem] flex-[2]"
-              placeholder="奖项"
-              value={item.title}
-              onChange={(e) => updateAward(i, { title: e.target.value })}
-            />
-            <button
-              type="button"
-              className="text-xs text-[var(--color-error)]"
-              onClick={() => setForm({ ...form, awards: data.awards.filter((_, j) => j !== i) })}
-            >
-              删
-            </button>
-          </div>
-        ))}
-        <button
-          type="button"
-          className="text-sm text-[var(--color-accent)]"
-          onClick={() => setForm({ ...form, awards: [...data.awards, { date: '', title: '' }] })}
-        >
-          + 添加奖项
         </button>
       </Section>
 

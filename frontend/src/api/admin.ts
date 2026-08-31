@@ -1,5 +1,6 @@
 import { api, getData } from './client'
 import type { Profile } from '../types/profile'
+import type { ResumeData, ResumePageContent } from '../types/resume'
 
 export function login(username: string, password: string) {
   return getData<{ token: string; username: string }>(
@@ -104,4 +105,12 @@ export function updateAdminStudentWork(payload: import('../types/studentWork').S
   return getData<import('../types/studentWork').StudentWorkData>(
     api.put('/admin/content/student-work', payload),
   )
+}
+
+export function fetchAdminResumeContent() {
+  return getData<ResumePageContent>(api.get('/admin/resume/content'))
+}
+
+export function updateAdminResumeContent(payload: ResumePageContent) {
+  return getData<ResumeData>(api.put('/admin/resume/content', payload))
 }

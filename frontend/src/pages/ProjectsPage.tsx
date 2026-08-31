@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { fetchProfile } from '../api/profile'
 import { fetchProjects } from '../api/projects'
 import { EmptyState, LoadingState } from '../components/UiStates'
-import { AdminEditLink } from '../components/AdminEditLink'
+import { PageHero } from '../components/PageHero'
 import type { Profile, ProjectSummary } from '../types/profile'
 
 export function ProjectsPage() {
@@ -39,48 +39,48 @@ export function ProjectsPage() {
 
   return (
     <div className="space-y-12">
-      <div className="flex justify-end">
-        <AdminEditLink to="/admin/projects" />
-      </div>
-      <div className="space-y-3">
-        <h1 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--color-ink)]">
-          项目
-        </h1>
-        {profile?.tagline && (
-          <p className="text-lg text-[var(--color-ink)]/90">{profile.tagline}</p>
-        )}
-        {profile?.bio && (
-          <p className="max-w-2xl text-base leading-relaxed text-[var(--color-muted)]">{profile.bio}</p>
-        )}
-        {!profile?.bio && (
-          <p className="text-[var(--color-muted)]">结果导向的项目摘要，点击查看细节。</p>
-        )}
-      </div>
+      <PageHero
+        label="Projects"
+        title="项目"
+        description={profile?.bio ?? profile?.tagline ?? '结果导向的项目摘要，点击查看细节。'}
+      />
 
       {projects.length === 0 ? (
         <EmptyState title="暂无项目" hint="稍后在管理后台添加作品。" />
       ) : (
         <div className="grid gap-5 sm:grid-cols-2">
           {projects.map((p) => (
-            <Link key={p.slug} to={`/projects/${p.slug}`} className="group geek-card p-5">
-              <div className="flex items-start justify-between gap-3">
-                <h2 className="font-medium group-hover:text-[var(--color-accent)]">{p.title}</h2>
-                {p.featured && (
-                  <span className="shrink-0 text-xs text-[var(--color-accent)]">精选</span>
-                )}
-              </div>
-              <p className="mt-1 text-xs text-[var(--color-muted)]">
-                {[p.startDate, p.endDate].filter(Boolean).join(' – ')}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">{p.summary}</p>
-              <div className="mt-4 flex flex-wrap gap-1.5">
-                {p.techStack.slice(0, 5).map((t) => (
-                  <span key={t} className="rounded bg-[var(--color-surface)] px-2 py-0.5 text-xs">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </Link>
+            <div key={p.slug} className="geek-card p-5">
+              <Link to={`/projects/${p.slug}`} className="group block">
+                <div className="flex items-start justify-between gap-3">
+                  <h2 className="font-medium group-hover:text-[var(--color-accent)]">{p.title}</h2>
+                  {p.featured && (
+                    <span className="shrink-0 text-xs text-[var(--color-accent)]">精选</span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-[var(--color-muted)]">
+                  {[p.startDate, p.endDate].filter(Boolean).join(' – ')}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">{p.summary}</p>
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {p.techStack.slice(0, 5).map((t) => (
+                    <span key={t} className="rounded bg-[var(--color-surface)] px-2 py-0.5 text-xs">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+              {p.githubUrl && (
+                <a
+                  className="mt-3 inline-block text-sm text-[var(--color-accent)] hover:underline"
+                  href={p.githubUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub
+                </a>
+              )}
+            </div>
           ))}
         </div>
       )}
@@ -92,12 +92,9 @@ export function ProjectsPage() {
             {profile.email && (
               <p>
                 邮箱：{' '}
-                <a className="text-[var(--color-accent)] hover:underline" href={`mailto:${profile.email}`}>
-                  {profile.email}
-                </a>
+                <span>{profile.email}</span>
               </p>
             )}
-            {profile.phone && <p>手机：{profile.phone}</p>}
             {profile.githubUrl && (
               <p>
                 GitHub：{' '}

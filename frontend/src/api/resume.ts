@@ -1,12 +1,8 @@
 import { api, getData } from './client'
-import type { ResumeInfo } from '../types/profile'
+import type { ResumeData } from '../types/resume'
 
 export function fetchResume() {
-  return getData<ResumeInfo>(api.get('/resume'))
-}
-
-export function resumeViewUrl() {
-  return '/api/resume/view'
+  return getData<ResumeData>(api.get('/resume'))
 }
 
 export function resumeDownloadUrl() {

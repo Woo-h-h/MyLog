@@ -7,6 +7,7 @@ const items = [
   { to: '/admin/projects', label: '项目' },
   { to: '/admin/posts', label: '文章' },
   { to: '/admin/resume', label: '简历' },
+  { to: '/admin/awards', label: '荣誉奖项' },
   { to: '/admin/student-work', label: '学生工作' },
 ]
 

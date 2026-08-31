@@ -1,60 +1,8 @@
 {
-  "summary": "湖南大学通信工程本科在读，方向聚焦 Java 后端、RAG 检索增强与 Agent 工程化落地。",
-  "education": [
-    {
-      "school": "湖南大学（985）",
-      "college": "计算机学院",
-      "major": "通信工程",
-      "degree": "本科 · 全日制",
-      "period": "2023.08 – 2027.06",
-      "gpa": "GPA 3.55/4.0（前 30%）",
-      "honors": "2025 中国大学生计算机设计大赛省级三等奖；爱湾医学奖学金；单项奖学金"
-    }
-  ],
-  "internships": [
-    {
-      "company": "超喵数字技术有限公司",
-      "role": "智能体研发",
-      "period": "2026.07 – 2026.08",
-      "location": "武汉",
-      "project": "NestEdu（智能教案助手）",
-      "highlights": [
-        "面向华科附幼的教学助手 Agent：主题活动方案、周计划编排、教师画像分析与入库",
-        "Go + Gin 搭建 BFF，对接智能体与知识库，支持方案生成、文档入库与 Word/PDF 导出",
-        "生产环境由 Go 统一托管静态资源并反向代理平台 API；Docker 多阶段构建交付"
-      ]
-    }
-  ],
-  "projectSummaries": [
-    {
-      "name": "RetriAgent Hub",
-      "period": "2026.06 – 2026.07",
-      "oneLiner": "Java17 + Spring Boot3 企业级 RAG：意图路由、多模型高可用、分布式限流与 MCP 工具集成"
-    },
-    {
-      "name": "食遇",
-      "period": "2026.02 – 2026.03",
-      "oneLiner": "校园美食社交平台：Redis 登录、秒杀、多级缓存与积分排行"
-    },
-    {
-      "name": "AI-ForBook",
-      "period": "竞赛项目",
-      "oneLiner": "二手书智能问答：RAG 全链路、Rerank、AgentScope / ReAct 与长期记忆"
-    },
-    {
-      "name": "NestEdu",
-      "period": "2026.07 – 2026.08",
-      "oneLiner": "教学助手 Agent BFF：方案生成、周计划、画像与工程化交付"
-    }
-  ],
-  "skills": [
-    "Java / 并发 / JVM",
-    "Spring Boot",
-    "MySQL",
-    "Redis",
-    "RAG 架构",
-    "Agent 工程化",
-    "计算机网络",
-    "数据结构与算法"
-  ]
+  "summary": "",
+  "education": [],
+  "awards": [],
+  "internships": [],
+  "projectSummaries": [],
+  "skills": []
 }

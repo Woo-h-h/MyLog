@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { fetchStudentWork } from '../api/content'
-import { AdminEditLink } from '../components/AdminEditLink'
 import { LoadingState } from '../components/UiStates'
 import { StudentWorkView } from '../components/StudentWorkView'
-import { defaultStudentWork } from '../types/studentWork'
+import { emptyStudentWork } from '../types/studentWork'
 import type { StudentWorkData } from '../types/studentWork'
 
 export function StudentWorkPage() {
@@ -20,7 +19,7 @@ export function StudentWorkPage() {
       .catch((e) => {
         if (!cancelled) {
           setError(e instanceof Error ? e.message : '加载失败')
-          setData(defaultStudentWork)
+          setData(emptyStudentWork)
         }
       })
       .finally(() => {
@@ -38,10 +37,7 @@ export function StudentWorkPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
-        <AdminEditLink to="/admin/student-work" />
-      </div>
-      {error && <p className="text-sm text-[var(--color-muted)]">使用本地默认内容展示（{error}）</p>}
+      {error && <p className="text-sm text-[var(--color-muted)]">部分数据加载失败（{error}），展示空内容。</p>}
       <StudentWorkView data={data} />
     </div>
   )

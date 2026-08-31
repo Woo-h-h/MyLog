@@ -52,7 +52,7 @@ public class DataSeeder implements CommandLineRunner {
     @Value("${mylog.resume.storage-dir:./uploads/resume}")
     private String storageDir;
 
-    @Value("${mylog.resume.filename:wanghuan-resume.pdf}")
+    @Value("${mylog.resume.filename:resume.pdf}")
     private String resumeFilename;
 
     @Value("${mylog.admin.username:admin}")
@@ -83,64 +83,67 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private void seedProfile() {
-        if (profileRepository.count() == 0) {
-            Profile profile = new Profile();
-            profile.setDisplayName("\u738b\u7115");
-            profile.setTagline(
-                    "Java \u540e\u7aef\u5f00\u53d1\uff5cRAG / Agent \u5de5\u7a0b\u5316\uff5c\u6e56\u5357\u5927\u5b66");
-            profile.setSubtitle(
-                    "\u4e13\u6ce8\u540e\u7aef\u4e0e\u667a\u80fd\u4f53\u5de5\u7a0b\u5316\uff0c\u80fd\u628a RAG / Agent \u4ece\u65b9\u6848\u843d\u5230\u53ef\u4ea4\u4ed8\u7cfb\u7edf\u3002");
-            profile.setBio(
-                    "\u6e56\u5357\u5927\u5b66\u901a\u4fe1\u5de5\u7a0b\u672c\u79d1\u5728\u8bfb\u3002\u5b9e\u4e60\u4e0e\u9879\u76ee\u805a\u7126 Java \u540e\u7aef\u3001RAG \u68c0\u7d22\u589e\u5f3a\u4e0e Agent \u5de5\u7a0b\u5316\u843d\u5730\u3002");
-            profile.setPhone("17362955307");
-            profile.setEmail("17362955307@163.com");
-            profile.setGithubUrl(null);
-            profile.setSkillsJson(
-                    "[\"Java\",\"Spring Boot\",\"MySQL\",\"Redis\",\"JVM\",\"JUC\",\"RAG\",\"Agent\",\"MCP\","
-                            + "\"\u8ba1\u7b97\u673a\u7f51\u7edc\",\"\u6570\u636e\u7ed3\u6784\u4e0e\u7b97\u6cd5\"]");
-            profile.setHighlightsJson(defaultHighlightsJson());
-            profileRepository.save(profile);
-            log.info("Seeded default profile");
+        if (profileRepository.count() > 0) {
             return;
         }
-
-        Profile existing = profileRepository.findAll().get(0);
-        if (existing.getHighlightsJson() == null || existing.getHighlightsJson().isBlank()) {
-            existing.setHighlightsJson(defaultHighlightsJson());
-            profileRepository.save(existing);
-            log.info("Updated profile highlights");
-        }
-    }
-
-    private String defaultHighlightsJson() {
-        return "[\"\u9662\u8c03\u7814\u90e8\u90e8\u957f / \u793e\u56e2\u603b\u8d1f\u8d23\u4eba\uff0c\u6210\u529f\u4e3e\u529e 200+\u4eba\u6d3b\u52a8\","
-                + "\"\u6267\u884c\u529b\u5f3a\uff0c\u5584\u4e8e\u6c9f\u901a\u534f\u8c03\uff0c\u80fd\u9ad8\u6548\u63a8\u8fdb\u9879\u76ee\u843d\u5730\","
-                + "\"\u5bf9\u6280\u672f\u9886\u57df\u5145\u6ee1\u70ed\u60c5\uff0c\u671f\u5f85\u5728\u76ee\u6807\u5c97\u4f4d\u4e2d\u6df1\u5ea6\u5b9e\u8df5\"]";
+        Profile profile = new Profile();
+        profile.setDisplayName("Site Owner");
+        profile.setTagline("Personal portfolio");
+        profile.setSubtitle("Edit profile and content in the admin panel.");
+        profile.setBio("");
+        profile.setPhone(null);
+        profile.setEmail(null);
+        profile.setGithubUrl(null);
+        profile.setSkillsJson("[]");
+        profile.setHighlightsJson("[]");
+        profileRepository.save(profile);
+        log.info("Seeded empty profile — configure via /admin/profile");
     }
 
     private void seedProjects() throws Exception {
-        if (projectRepository.count() > 0) {
-            return;
-        }
         try (InputStream in = new ClassPathResource("seed/projects.json").getInputStream()) {
             List<JsonNode> nodes = objectMapper.readValue(in, new TypeReference<>() {});
-            for (JsonNode n : nodes) {
-                Project p = new Project();
-                p.setSlug(n.path("slug").asText());
-                p.setTitle(n.path("title").asText());
-                p.setSummary(n.path("summary").asText());
-                p.setContent(n.path("content").asText());
-                p.setTechStack(n.path("techStack").asText(null));
-                p.setGithubUrl(textOrNull(n, "githubUrl"));
-                p.setDemoUrl(textOrNull(n, "demoUrl"));
-                p.setStartDate(textOrNull(n, "startDate"));
-                p.setEndDate(textOrNull(n, "endDate"));
-                p.setSortOrder(n.path("sortOrder").asInt(0));
-                p.setFeatured(n.path("featured").asBoolean(false));
-                p.setPublished(n.path("published").asBoolean(true));
-                projectRepository.save(p);
+            if (projectRepository.count() == 0) {
+                for (JsonNode n : nodes) {
+                    Project p = new Project();
+                    p.setSlug(n.path("slug").asText());
+                    p.setTitle(n.path("title").asText());
+                    p.setSummary(n.path("summary").asText());
+                    p.setContent(n.path("content").asText());
+                    p.setTechStack(n.path("techStack").asText(null));
+                    p.setGithubUrl(textOrNull(n, "githubUrl"));
+                    p.setDemoUrl(textOrNull(n, "demoUrl"));
+                    p.setStartDate(textOrNull(n, "startDate"));
+                    p.setEndDate(textOrNull(n, "endDate"));
+                    p.setSortOrder(n.path("sortOrder").asInt(0));
+                    p.setFeatured(n.path("featured").asBoolean(false));
+                    p.setPublished(n.path("published").asBoolean(true));
+                    projectRepository.save(p);
+                }
+                log.info("Seeded {} projects", nodes.size());
+                return;
             }
-            log.info("Seeded {} projects", nodes.size());
+            int updated = 0;
+            for (JsonNode n : nodes) {
+                String githubUrl = textOrNull(n, "githubUrl");
+                if (githubUrl == null) {
+                    continue;
+                }
+                var existing = projectRepository.findBySlug(n.path("slug").asText());
+                if (existing.isEmpty()) {
+                    continue;
+                }
+                Project p = existing.get();
+                if (githubUrl.equals(p.getGithubUrl())) {
+                    continue;
+                }
+                p.setGithubUrl(githubUrl);
+                projectRepository.save(p);
+                updated++;
+            }
+            if (updated > 0) {
+                log.info("Synced githubUrl for {} projects", updated);
+            }
         }
     }
 
@@ -155,7 +158,7 @@ public class DataSeeder implements CommandLineRunner {
         }
         ResumeFile file = new ResumeFile();
         file.setStoragePath(path.toString());
-        file.setOriginalFilename("\u738b\u7115_\u7b80\u5386.pdf");
+        file.setOriginalFilename("resume.pdf");
         file.setCurrentVersion(true);
         file.setUploadedAt(Instant.now());
         resumeFileRepository.save(file);

@@ -23,14 +23,14 @@ spring:
       max-request-size: 20MB
 
 server:
-  port: 8080
+  port: 8090
 
 mylog:
   cors:
     allowed-origins: http://localhost:5173
   resume:
     storage-dir: ./uploads/resume
-    filename: wanghuan-resume.pdf
+    filename: resume.pdf
   jwt:
     secret: mylog-dev-secret-change-me-please-32bytes-min
     expire-hours: 72

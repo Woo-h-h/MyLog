@@ -20,7 +20,7 @@ mylog:
     allowed-origins: ${CORS_ORIGINS:http://localhost}
   resume:
     storage-dir: ${RESUME_DIR:/app/uploads/resume}
-    filename: wanghuan-resume.pdf
+    filename: resume.pdf
   jwt:
     secret: ${JWT_SECRET:mylog-prod-change-this-secret-to-32bytes-min}
     expire-hours: ${JWT_EXPIRE_HOURS:72}

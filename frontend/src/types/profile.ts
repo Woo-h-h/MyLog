@@ -24,16 +24,11 @@ export interface ProjectSummary {
   startDate?: string | null
   endDate?: string | null
   featured: boolean
+  githubUrl?: string | null
 }
 
 export interface ProjectDetail extends ProjectSummary {
   content: string
   githubUrl?: string | null
   demoUrl?: string | null
-}
-
-export interface ResumeInfo {
-  pdfAvailable: boolean
-  filename?: string | null
-  uploadedAt?: string | null
 }

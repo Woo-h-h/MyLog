@@ -55,7 +55,6 @@ export function AdminProfilePage() {
           ['tagline', '一句话定位'],
           ['subtitle', '副标题'],
           ['email', '邮箱'],
-          ['phone', '手机'],
           ['githubUrl', 'GitHub'],
         ] as const
       ).map(([key, label]) => (

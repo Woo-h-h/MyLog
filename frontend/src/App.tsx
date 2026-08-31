@@ -3,6 +3,7 @@ import { AdminLayout } from './components/AdminLayout'
 import { Layout } from './components/Layout'
 import { RequireAuth } from './components/RequireAuth'
 import { StudentWorkPage } from './pages/StudentWorkPage'
+import { AdminAwardsPage } from './pages/admin/AdminAwardsPage'
 import { AdminHomePage } from './pages/admin/AdminHomePage'
 import { AdminLoginPage } from './pages/admin/AdminLoginPage'
 import { AdminPostsPage } from './pages/admin/AdminPostsPage'
@@ -16,7 +17,7 @@ import { PostDetailPage } from './pages/PostDetailPage'
 import { PostListPage } from './pages/PostListPage'
 import { ProjectDetailPage } from './pages/ProjectDetailPage'
 import { ProjectsPage } from './pages/ProjectsPage'
-import { ResumePage } from './pages/ResumePage'
+import { ResumeRedirectPage } from './pages/ResumeRedirectPage'
 
 export default function App() {
   return (
@@ -24,7 +25,7 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="resume" element={<ResumePage />} />
+          <Route path="resume" element={<ResumeRedirectPage />} />
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/:slug" element={<ProjectDetailPage />} />
           <Route path="blog" element={<PostListPage type="blog" />} />
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="projects" element={<AdminProjectsPage />} />
             <Route path="posts" element={<AdminPostsPage />} />
             <Route path="resume" element={<AdminResumePage />} />
+            <Route path="awards" element={<AdminAwardsPage />} />
             <Route path="student-work" element={<AdminStudentWorkPage />} />
           </Route>
         </Route>

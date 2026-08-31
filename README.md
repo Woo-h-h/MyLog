@@ -41,8 +41,7 @@ Mylog/
 ├── backend/           # Spring Boot API
 ├── docker-compose.yml # 生产部署
 ├── .env               # 生产环境变量（勿提交 Git）
-├── agent.md           # 项目规划文档
-└── changelog.md       # 变更记录
+└── README.md
 ```
 
 ---
@@ -198,10 +197,35 @@ Docker 卷：
 
 ---
 
+## 数据与隐私
+
+**Git 仓库只保留空项目骨架**，不包含真实简历、文章或个人资料。
+
+| 内容 | 存放位置 |
+|------|---------|
+| 个人资料、项目、博客、笔记 | MySQL 数据库（Docker 卷 `mysql_data`） |
+| 简历正文、学生工作、荣誉奖项 | MySQL `site_content` 表 |
+| 简历 PDF | Docker 卷 `resume_data`（或 `backend/uploads/resume/`） |
+
+首次 `docker compose up` 后，通过 **管理后台**（`/admin`）填写内容。他人 `git clone` 只会得到空站点，看不到你的数据。
+
+### 备份真实数据
+
+```bash
+# 导出 MySQL（示例）
+docker compose exec mysql mysqldump -uroot -p"$MYSQL_ROOT_PASSWORD" mylog > mylog-backup.sql
+
+# 备份简历 PDF 卷（示例）
+docker run --rm -v mylog_resume_data:/data -v $(pwd):/backup alpine tar czf /backup/resume-data.tar.gz -C /data .
+```
+
+> **注意：** 若曾将个人数据推送到 GitHub，历史 commit 中可能仍保留旧文件。需要彻底清理时，请使用 [git filter-repo](https://github.com/newren/git-filter-repo) 或 BFG 重写历史后再 force push。
+
+---
+
 ## 相关文档
 
-- [agent.md](./agent.md) — 项目规划与里程碑
-- [changelog.md](./changelog.md) — 变更日志
+- [backend/src/main/resources/seed/README.md](./backend/src/main/resources/seed/README.md) — 空 seed 说明
 
 ---
 

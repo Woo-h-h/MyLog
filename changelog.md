@@ -6,7 +6,10 @@
 
 ## [Unreleased]
 
-（暂无）
+### Added
+- 首页个人简介「教育经历」下方新增「荣誉奖项」栏目（种子数据 + 管理后台可编辑）
+- 项目挂载 GitHub 仓库链接：RetriAgent Hub、食遇、AI-ForBook
+- 项目详情正文优先拉取并渲染对应仓库 README（失败时回退本地介绍）
 
 ---
 
@@ -16,6 +19,7 @@
 - 移除简历 JSON 正文编辑，简历仅以 PDF 源文件保存（磁盘 + `resume_file` 表）
 - 前台 `/resume` 在线预览 PDF，并提供下载
 - 管理后台 `/admin/resume` 仅保留 PDF 上传与管理
+- 学生工作时间线整合为完整 17 条（2023.10–2025.9），章节更名为「工作经历时间线」
 
 ### Removed
 - `/api/admin/resume/content` JSON 读写接口

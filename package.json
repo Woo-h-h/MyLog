@@ -1,0 +1,12 @@
+{
+  "name": "mylog",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "open": "powershell -ExecutionPolicy Bypass -File scripts/open-site.ps1",
+    "open:docker": "powershell -ExecutionPolicy Bypass -File scripts/open-site.ps1 -Url http://localhost",
+    "docker:up": "docker compose up -d --build && npm run open:docker",
+    "docker:up:dev": "docker compose up -d --build && npm run open:docker"
+  }
+}

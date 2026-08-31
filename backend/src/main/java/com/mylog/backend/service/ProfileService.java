@@ -21,7 +21,9 @@ public class ProfileService {
     private final ObjectMapper objectMapper;
 
     public ProfileDto getPublicProfile() {
-        return toDto(requireProfile());
+        ProfileDto dto = toDto(requireProfile());
+        dto.setPhone(null);
+        return dto;
     }
 
     public ProfileDto getAdminProfile() {

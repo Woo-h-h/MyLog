@@ -19,8 +19,9 @@ import java.util.Set;
 public class SiteContentService {
 
     public static final String KEY_STUDENT_WORK = "student_work";
+    public static final String KEY_RESUME = "resume";
 
-    private static final Set<String> ALLOWED_KEYS = Set.of(KEY_STUDENT_WORK);
+    private static final Set<String> ALLOWED_KEYS = Set.of(KEY_STUDENT_WORK, KEY_RESUME);
 
     private final SiteContentRepository siteContentRepository;
     private final ObjectMapper objectMapper;
@@ -78,6 +79,7 @@ public class SiteContentService {
     private JsonNode loadSeed(String key) {
         String seedPath = switch (key) {
             case KEY_STUDENT_WORK -> "seed/student-work.json";
+            case KEY_RESUME -> "seed/resume.json";
             default -> throw new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown content key");
         };
         try (InputStream in = new ClassPathResource(seedPath).getInputStream()) {

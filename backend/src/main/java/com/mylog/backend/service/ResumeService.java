@@ -1,5 +1,8 @@
 package com.mylog.backend.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mylog.backend.dto.ResumeDto;
 import com.mylog.backend.dto.ResumeFileDto;
 import com.mylog.backend.model.ResumeFile;
@@ -27,28 +30,38 @@ import java.util.UUID;
 public class ResumeService {
 
     private final ResumeFileRepository resumeFileRepository;
+    private final SiteContentService siteContentService;
+    private final ObjectMapper objectMapper;
 
     @Value("${mylog.resume.storage-dir:./uploads/resume}")
     private String storageDir;
 
-    @Value("${mylog.resume.filename:wanghuan-resume.pdf}")
+    @Value("${mylog.resume.filename:resume.pdf}")
     private String configuredFilename;
 
     public ResumeDto getResume() {
-        Optional<ResumeFile> current = currentFile();
-        if (current.isEmpty()) {
-            return ResumeDto.builder().pdfAvailable(false).build();
+        ResumeDto dto = readPageContent();
+        applyPdfMeta(dto);
+        return dto;
+    }
+
+    public ResumeDto getContentForAdmin() {
+        return readPageContent();
+    }
+
+    public ResumeDto updateContent(ResumeDto body) {
+        try {
+            JsonNode node = objectMapper.valueToTree(body);
+            if (node instanceof ObjectNode objectNode) {
+                objectNode.remove("pdfAvailable");
+                objectNode.remove("filename");
+                objectNode.remove("uploadedAt");
+            }
+            siteContentService.save(SiteContentService.KEY_RESUME, node);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid resume content");
         }
-        ResumeFile file = current.get();
-        Path path = Paths.get(file.getStoragePath());
-        if (!Files.exists(path)) {
-            return ResumeDto.builder().pdfAvailable(false).build();
-        }
-        return ResumeDto.builder()
-                .pdfAvailable(true)
-                .filename(file.getOriginalFilename())
-                .uploadedAt(file.getUploadedAt())
-                .build();
+        return getResume();
     }
 
     public Resource loadPdf() {
@@ -112,6 +125,34 @@ public class ResumeService {
             resumeFileRepository.save(f);
         });
         return toDto(target);
+    }
+
+    private ResumeDto readPageContent() {
+        ResumeDto dto = siteContentService.readAs(
+                SiteContentService.KEY_RESUME,
+                ResumeDto.class,
+                "seed/resume.json");
+        if (dto.getAwards() == null) {
+            dto.setAwards(List.of());
+        }
+        return dto;
+    }
+
+    private void applyPdfMeta(ResumeDto dto) {
+        Optional<ResumeFile> current = currentFile();
+        if (current.isEmpty()) {
+            dto.setPdfAvailable(false);
+            return;
+        }
+        ResumeFile file = current.get();
+        Path path = Paths.get(file.getStoragePath());
+        if (!Files.exists(path)) {
+            dto.setPdfAvailable(false);
+            return;
+        }
+        dto.setPdfAvailable(true);
+        dto.setFilename(file.getOriginalFilename());
+        dto.setUploadedAt(file.getUploadedAt());
     }
 
     private ResumeFileDto toDto(ResumeFile f) {

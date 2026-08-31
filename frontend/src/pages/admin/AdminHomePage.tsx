@@ -45,6 +45,11 @@ export function AdminHomePage() {
             </Link>
           </li>
           <li>
+            <Link className="text-[var(--color-accent)] hover:underline" to="/admin/awards">
+              管理荣誉奖项
+            </Link>
+          </li>
+          <li>
             <Link className="text-[var(--color-accent)] hover:underline" to="/admin/student-work">
               编辑学生工作
             </Link>
